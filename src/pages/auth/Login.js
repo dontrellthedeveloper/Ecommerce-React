@@ -8,16 +8,16 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 
 const createOrUpdateUser = async (authtoken) => {
-    return await axios.post(
-        `${process.env.REACT_APP_API}/create-or-update-user`,
-        {},
+    return await axios.post(`${process.env.REACT_APP_API}/create-or-update-user`, {},
         {
             headers: {
-                authtoken,
+                authtoken
             },
         }
     );
+
 };
+
 
 const Login = ({ history }) => {
     const [email, setEmail] = useState("");
@@ -45,6 +45,8 @@ const Login = ({ history }) => {
             createOrUpdateUser(idTokenResult.token)
                 .then((res) => console.log("CREATE OR UPDATE RES", res))
                 .catch();
+                // console.log(idTokenResult.token);
+                // console.log("CREATE OR UPDATE RES");
 
             // dispatch({
             //   type: "LOGGED_IN_USER",
