@@ -19,6 +19,7 @@
     "react-toastify": "^6.1.0",
     "redux": "^4.0.5",
     "redux-devtools-extension": "^2.13.8",
+    "slugify": "^1.4.6",
     "web-vitals": "^0.2.4"
   },
   "scripts": {
