@@ -23,6 +23,9 @@ const initialState = {
 const ProductCreate = () => {
     const [values, setValues] = useState(initialState);
 
+    // redux
+    const { user } = useSelector((state) => ({ ...state }));
+
     // destructure
     const {
         title,
@@ -42,11 +45,19 @@ const ProductCreate = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        //
+        createProduct(values, user.token)
+            .then((res) => {
+                console.log(res);
+            })
+            .catch((err) => {
+                console.log(err);
+                if (err.response.status === 400) toast.error(err.response.data);
+            });
     };
 
     const handleChange = (e) => {
-        //
+        setValues({ ...values, [e.target.name]: e.target.value });
+        // console.log(e.target.name, " ----- ", e.target.value);
     };
 
     return (
