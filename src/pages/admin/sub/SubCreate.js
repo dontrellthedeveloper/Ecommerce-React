@@ -3,7 +3,7 @@ import AdminNav from "../../../components/nav/AdminNav";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { getCategories } from "../../../functions/category";
-import { createSub, getSub, removeSub } from "../../../functions/sub";
+import { createSub, getSub, removeSub, getSubs } from "../../../functions/sub";
 import { Link } from "react-router-dom";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import CategoryForm from "../../../components/forms/CategoryForm";
@@ -16,15 +16,19 @@ const SubCreate = () => {
     const [loading, setLoading] = useState(false);
     const [categories, setCategories] = useState([]);
     const [category, setCategory] = useState("");
+    const [subs, setSubs] = useState([]);
     // step 1
     const [keyword, setKeyword] = useState("");
 
     useEffect(() => {
         loadCategories();
+        loadSubs();
     }, []);
 
     const loadCategories = () =>
         getCategories().then((c) => setCategories(c.data));
+
+    const loadSubs = () => getSubs().then((s) => setSubs(s.data));
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -36,6 +40,7 @@ const SubCreate = () => {
                 setLoading(false);
                 setName("");
                 toast.success(`"${res.data.name}" is created`);
+                loadSubs();
             })
             .catch((err) => {
                 console.log(err);
@@ -53,6 +58,7 @@ const SubCreate = () => {
                 .then((res) => {
                     setLoading(false);
                     toast.error(`${res.data.name} deleted`);
+                    loadSubs();
                 })
                 .catch((err) => {
                     if (err.response.status === 400) {
@@ -96,8 +102,6 @@ const SubCreate = () => {
                         </select>
                     </div>
 
-                    {JSON.stringify(category)}
-
                     <CategoryForm
                         handleSubmit={handleSubmit}
                         name={name}
@@ -108,22 +112,22 @@ const SubCreate = () => {
                     <LocalSearch keyword={keyword} setKeyword={setKeyword} />
 
                     {/* step 5 */}
-                    {/* {categories.filter(searched(keyword)).map((c) => (
-            <div className="alert alert-secondary" key={c._id}>
-              {c.name}
-              <span
-                onClick={() => handleRemove(c.slug)}
-                className="btn btn-sm float-right"
-              >
+                    {subs.filter(searched(keyword)).map((s) => (
+                        <div className="alert alert-secondary" key={s._id}>
+                            {s.name}
+                            <span
+                                onClick={() => handleRemove(s.slug)}
+                                className="btn btn-sm float-right"
+                            >
                 <DeleteOutlined className="text-danger" />
               </span>
-              <Link to={`/admin/category/${c.slug}`}>
+                            <Link to={`/admin/sub/${s.slug}`}>
                 <span className="btn btn-sm float-right">
                   <EditOutlined className="text-warning" />
                 </span>
-              </Link>
-            </div>
-          ))} */}
+                            </Link>
+                        </div>
+                    ))}
                 </div>
             </div>
         </div>
@@ -131,4 +135,3 @@ const SubCreate = () => {
 };
 
 export default SubCreate;
-
