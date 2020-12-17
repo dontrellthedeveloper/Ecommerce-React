@@ -56,6 +56,7 @@ const CategoryUpdate = ({ history, match }) => {
                         name={name}
                         setName={setName}
                     />
+                    <button className="btn btn-outline-primary"><Link to={`/admin/category`} >Cancel</Link></button>
                     <hr />
                 </div>
             </div>
