@@ -30,6 +30,7 @@ const ProductUpdate = ({ match }) => {
     const [subOptions, setSubOptions] = useState([]);
     const [arrayOfSubs, setArrayOfSubs] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const { user } = useSelector((state) => ({ ...state }));
     // router
@@ -75,7 +76,7 @@ const ProductUpdate = ({ match }) => {
         // console.log(e.target.name, " ----- ", e.target.value);
     };
 
-    const handleCatagoryChange = (e) => {
+    const handleCategoryChange = (e) => {
         e.preventDefault();
         console.log("CLICKED CATEGORY", e.target.value);
         setValues({ ...values, subs: [] });
@@ -106,15 +107,28 @@ const ProductUpdate = ({ match }) => {
                 </div>
 
                 <div className="col-md-10">
-                    <h4>Product update</h4>
-                    {JSON.stringify(values)}
+                    {loading ? (
+                        <LoadingOutlined className="text-danger h1" />
+                    ) : (
+                        <h4>Product update</h4>
+                    )}
+
+                    {/* {JSON.stringify(values)} */}
+
+                    <div className="p-3">
+                        <FileUpload
+                            values={values}
+                            setValues={setValues}
+                            setLoading={setLoading}
+                        />
+                    </div>
 
                     <ProductUpdateForm
                         handleSubmit={handleSubmit}
                         handleChange={handleChange}
                         setValues={setValues}
                         values={values}
-                        handleCatagoryChange={handleCatagoryChange}
+                        handleCategoryChange={handleCategoryChange}
                         categories={categories}
                         subOptions={subOptions}
                         arrayOfSubs={arrayOfSubs}
