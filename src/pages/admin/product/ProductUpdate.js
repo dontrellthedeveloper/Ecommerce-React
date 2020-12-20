@@ -28,6 +28,7 @@ const ProductUpdate = ({ match }) => {
     const [values, setValues] = useState(initialState);
     const [categories, setCategories] = useState([]);
     const [subOptions, setSubOptions] = useState([]);
+    const [arrayOfSubs, setArrayOfSubs] = useState([]);
 
     const { user } = useSelector((state) => ({ ...state }));
     // router
@@ -41,7 +42,19 @@ const ProductUpdate = ({ match }) => {
     const loadProduct = () => {
         getProduct(slug).then((p) => {
             // console.log("single product", p);
+            // 1 load single proudct
             setValues({ ...values, ...p.data });
+            // 2 load single product category subs
+            getCategorySubs(p.data.category._id).then((res) => {
+                setSubOptions(res.data); // on first load, show default subs
+            });
+            // 3 prepare array of sub ids to show as default sub values in antd Select
+            let arr = [];
+            p.data.subs.map((s) => {
+                arr.push(s._id);
+            });
+            console.log("ARR", arr);
+            setArrayOfSubs((prev) => arr); // required for ant design select to work
         });
     };
 
@@ -90,6 +103,8 @@ const ProductUpdate = ({ match }) => {
                         handleCatagoryChange={handleCatagoryChange}
                         categories={categories}
                         subOptions={subOptions}
+                        arrayOfSubs={arrayOfSubs}
+                        setArrayOfSubs={setArrayOfSubs}
                     />
                     <hr />
                 </div>
