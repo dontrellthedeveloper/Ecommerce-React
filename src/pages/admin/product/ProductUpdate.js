@@ -46,9 +46,9 @@ const ProductUpdate = ({ match, history }) => {
             // console.log("single product", p);
             // 1 load single proudct
             setValues({ ...values, ...p.data });
-            // 2 load single product category subs
+            // 2 load single product category sub
             getCategorySubs(p.data.category._id).then((res) => {
-                setSubOptions(res.data); // on first load, show default subs
+                setSubOptions(res.data); // on first load, show default sub
             });
             // 3 prepare array of sub ids to show as default sub values in antd Select
             let arr = [];
