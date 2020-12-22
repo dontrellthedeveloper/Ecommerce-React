@@ -35,6 +35,15 @@ const Shop = () => {
         "ASUS",
     ]);
     const [brand, setBrand] = useState("");
+    const [colors, setColors] = useState([
+        "Black",
+        "Brown",
+        "Silver",
+        "White",
+        "Blue",
+    ]);
+    const [color, setColor] = useState("");
+    const [shipping, setShipping] = useState("");
 
     let dispatch = useDispatch();
     let { search } = useSelector((state) => ({ ...state }));
@@ -88,6 +97,8 @@ const Shop = () => {
         setStar("");
         setSub("");
         setBrand("");
+        setColor("");
+        setShipping("");
         setTimeout(() => {
             setOk(!ok);
         }, 300);
@@ -122,6 +133,8 @@ const Shop = () => {
         setStar("");
         setSub("");
         setBrand("");
+        setColor("");
+        setShipping("");
         // console.log(e.target.value);
         let inTheState = [...categoryIds];
         let justChecked = e.target.value;
@@ -152,6 +165,8 @@ const Shop = () => {
         setStar(num);
         setSub("");
         setBrand("");
+        setColor("");
+        setShipping("");
         fetchProducts({ stars: num });
     };
 
@@ -189,6 +204,8 @@ const Shop = () => {
         setCategoryIds([]);
         setStar("");
         setBrand("");
+        setColor("");
+        setShipping("");
         fetchProducts({ sub });
     };
 
@@ -215,8 +232,77 @@ const Shop = () => {
         setPrice([0, 0]);
         setCategoryIds([]);
         setStar("");
+        setColor("");
         setBrand(e.target.value);
+        setShipping("");
         fetchProducts({ brand: e.target.value });
+    };
+
+    // 8. show products based on color
+    const showColors = () =>
+        colors.map((c) => (
+            <Radio
+                value={c}
+                name={c}
+                checked={c === color}
+                onChange={handleColor}
+                className="pb-1 pl-4 pr-4"
+            >
+                {c}
+            </Radio>
+        ));
+
+    const handleColor = (e) => {
+        setSub("");
+        dispatch({
+            type: "SEARCH_QUERY",
+            payload: { text: "" },
+        });
+        setPrice([0, 0]);
+        setCategoryIds([]);
+        setStar("");
+        setBrand("");
+        setColor(e.target.value);
+        setShipping("");
+        fetchProducts({ color: e.target.value });
+    };
+
+    // 9. show products based on shipping yes/no
+    const showShipping = () => (
+        <>
+            <Checkbox
+                className="pb-2 pl-4 pr-4"
+                onChange={handleShippingchange}
+                value="Yes"
+                checked={shipping === "Yes"}
+            >
+                Yes
+            </Checkbox>
+
+            <Checkbox
+                className="pb-2 pl-4 pr-4"
+                onChange={handleShippingchange}
+                value="No"
+                checked={shipping === "No"}
+            >
+                No
+            </Checkbox>
+        </>
+    );
+
+    const handleShippingchange = (e) => {
+        setSub("");
+        dispatch({
+            type: "SEARCH_QUERY",
+            payload: { text: "" },
+        });
+        setPrice([0, 0]);
+        setCategoryIds([]);
+        setStar("");
+        setBrand("");
+        setColor("");
+        setShipping(e.target.value);
+        fetchProducts({ shipping: e.target.value });
     };
 
     return (
@@ -300,6 +386,34 @@ const Shop = () => {
                         >
                             <div style={{ maringTop: "-10px" }} className="pr-5">
                                 {showBrands()}
+                            </div>
+                        </SubMenu>
+
+                        {/* colors */}
+                        <SubMenu
+                            key="6"
+                            title={
+                                <span className="h6">
+                  <DownSquareOutlined /> Colors
+                </span>
+                            }
+                        >
+                            <div style={{ maringTop: "-10px" }} className="pr-5">
+                                {showColors()}
+                            </div>
+                        </SubMenu>
+
+                        {/* shipping */}
+                        <SubMenu
+                            key="7"
+                            title={
+                                <span className="h6">
+                  <DownSquareOutlined /> Shipping
+                </span>
+                            }
+                        >
+                            <div style={{ maringTop: "-10px" }} className="pr-5">
+                                {showShipping()}
                             </div>
                         </SubMenu>
                     </Menu>
